@@ -1,0 +1,29 @@
+spring:
+  #  profiles:
+  #    active: test
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news_comments
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        show-sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+      #        'create', 'create-drop', 'create-only', 'drop', 'update', 'none', 'validate'.
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+#cache:
+#  algorithm: LRU
+#  capacity: 50
+
