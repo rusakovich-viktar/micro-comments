@@ -2,6 +2,7 @@ package com.example.commentsproject.controller;
 
 import com.example.commentsproject.dto.request.CommentRequestDto;
 import com.example.commentsproject.dto.response.CommentResponseDto;
+import com.example.commentsproject.entity.Comment;
 import com.example.commentsproject.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -52,4 +54,6 @@ public class CommentController {
     public ResponseEntity<Page<CommentResponseDto>> getAllComments(@PathVariable Long newsId, Pageable pageable) {
         return ResponseEntity.ok(commentService.getAllCommentsByNewsId(newsId, pageable));
     }
+
+
 }

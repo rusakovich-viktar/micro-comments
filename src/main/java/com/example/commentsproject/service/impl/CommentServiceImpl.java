@@ -100,4 +100,9 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(id)
                 .orElseThrow(() -> EntityNotFoundException.of(Comment.class, id));
     }
+
+    public Page<Comment> search(String queryString, Pageable pageable) {
+        return commentRepository.search(queryString, pageable);
+    }
+
 }
