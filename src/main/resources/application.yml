@@ -1,6 +1,8 @@
 spring:
   #  profiles:
   #    active: test
+  application:
+    name: micro-comments
   datasource:
     url: jdbc:postgresql://localhost:5432/news_comments
     username: postgres
@@ -23,6 +25,10 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+server:
+  port: 8082
+
 #cache:
 #  algorithm: LRU
 #  capacity: 50
