@@ -1,12 +1,11 @@
 spring:
-  #  profiles:
-  #    active: test
+  profiles:
+    default: dev
+
+  #    active: prod
+
   application:
     name: micro-comments
-  datasource:
-    url: jdbc:postgresql://localhost:5432/news_comments
-    username: postgres
-    password: postgres
   jpa:
     properties:
       hibernate:

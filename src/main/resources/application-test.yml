@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_db_news_comments
+    username: postgres
+    password: postgres
+  liquibase:
+    contexts: test
+#cache:
+#  algorithm: LRU
+#  capacity: 50
