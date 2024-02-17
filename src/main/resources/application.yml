@@ -2,17 +2,13 @@ spring:
   profiles:
     default: dev
 
-  #    active: prod
+    active: prod
 
   application:
     name: micro-comments
   jpa:
     properties:
       hibernate:
-        search:
-          backend:
-            type: elasticsearch
-            hosts: localhost:9200
         show-sql: true
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect

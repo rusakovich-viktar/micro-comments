@@ -10,6 +10,7 @@ import com.example.commentsproject.mapper.CommentMapper;
 import com.example.commentsproject.repository.CommentRepository;
 import com.example.commentsproject.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
+    private final String PORT_OTHER_MICROSERVICE = "8081";
+    private final String PREFIX_HTTP = "http://";
+    @Value("${map.value}")
+    private String IP;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final WebClient webClient;
@@ -83,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void findNewsById(Long newsId) {
-        String newsServiceUrl = "http://localhost:8081/news";
+        String newsServiceUrl = PREFIX_HTTP + IP + ":" + PORT_OTHER_MICROSERVICE + "/news";
         String url = newsServiceUrl + "/" + newsId;
         NewsResponseDto news = webClient.get()
                 .uri(url)

@@ -5,6 +5,13 @@ spring:
     password: postgres
   liquibase:
     contexts: test
+  jpa:
+    properties:
+      hibernate:
+        search:
+          backend:
+            type: elasticsearch
+            hosts: localhost:9200
 #cache:
 #  algorithm: LRU
 #  capacity: 50

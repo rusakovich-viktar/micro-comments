@@ -1,10 +1,19 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/news_comments
+    url: jdbc:postgresql://db:5432/prod_db
     username: postgres
     password: postgres
   liquibase:
     contexts: prod
+  jpa:
+    properties:
+      hibernate:
+        search:
+          backend:
+            type: elasticsearch
+            hosts: elasticsearch:9200
 #cache:
 #  algorithm: LRU
 #  capacity: 50
+map:
+  value: micro-news
