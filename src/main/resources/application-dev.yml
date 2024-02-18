@@ -12,9 +12,10 @@ spring:
           backend:
             type: elasticsearch
             hosts: localhost:9200
-cache:
-  algorithm: LRU
-  capacity: 50
 
 map:
   value: localhost
+
+cache:
+  algorithm: LRU
+  capacity: 50
