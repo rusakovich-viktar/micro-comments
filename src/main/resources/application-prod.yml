@@ -12,8 +12,9 @@ spring:
           backend:
             type: elasticsearch
             hosts: elasticsearch:9200
-#cache:
-#  algorithm: LRU
-#  capacity: 50
+  data:
+    redis:
+      host: redis
+
 map:
   value: micro-news

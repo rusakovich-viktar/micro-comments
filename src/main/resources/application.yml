@@ -27,7 +27,3 @@ logging:
 server:
   port: 8082
 
-#cache:
-#  algorithm: LRU
-#  capacity: 50
-

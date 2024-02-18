@@ -11,6 +11,10 @@ import com.example.commentsproject.repository.CommentRepository;
 import com.example.commentsproject.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
+@EnableCaching
 public class CommentServiceImpl implements CommentService {
 
     private final String PORT_OTHER_MICROSERVICE = "8081";
@@ -31,6 +36,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
+    @CachePut(value = "comment", key = "#result.id")
     public CommentResponseDto createComment(Long newsId, CommentRequestDto commentRequestDto) {
 
         findNewsById(newsId);
@@ -43,6 +49,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
+    @Cacheable(value = "comment")
     public CommentResponseDto getCommentById(Long newsId, Long id) {
 
         findNewsById(newsId);
@@ -54,6 +61,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
+    @CachePut(value = "comment", key = "#id")
     public CommentResponseDto updateComment(Long newsId, Long id, CommentRequestDto commentRequestDto) {
 
         findNewsById(newsId);
@@ -66,6 +74,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
+    @CacheEvict(value = "news", key = "#id")
     @Override
     public void deleteComment(Long newsId, Long id) {
 
