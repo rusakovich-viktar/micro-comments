@@ -37,7 +37,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    @CacheableAop
     @CachePut(value = "comment", key = "#result.id")
     public CommentResponseDto createComment(Long newsId, CommentRequestDto commentRequestDto) {
 
@@ -51,7 +50,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    @CacheableAop
     @Cacheable(value = "comment")
     public CommentResponseDto getCommentById(Long newsId, Long id) {
 
@@ -64,7 +62,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    @CacheableAop
     @CachePut(value = "comment", key = "#id")
     public CommentResponseDto updateComment(Long newsId, Long id, CommentRequestDto commentRequestDto) {
 
@@ -79,7 +76,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @CacheEvict(value = "news", key = "#id")
-    @CacheableAop
     @Override
     public void deleteComment(Long newsId, Long id) {
 

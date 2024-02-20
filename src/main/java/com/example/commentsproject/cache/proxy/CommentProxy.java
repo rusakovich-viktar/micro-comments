@@ -35,7 +35,7 @@ public class CommentProxy {
 
 
     @SuppressWarnings("checkstyle:IllegalCatch")
-    @Around("@annotation(com.example.commentsproject.cache.proxy.annotation.CacheableAop) " +
+    @Around("@annotation(org.springframework.cache.annotation.Cacheable) " +
             "&& execution(* com.example.commentsproject.service.CommentService.getCommentById(..))")
     public Object getComment(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
@@ -71,7 +71,7 @@ public class CommentProxy {
     }
 
 
-    @AfterReturning(pointcut = "@annotation(com.example.commentsproject.cache.proxy.annotation.CacheableAop) && " +
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) && " +
             "execution(* com.example.commentsproject.service.CommentService.createComment(..))", returning = "response")
     public void createComment(CommentResponseDto response) {
         userCache.get().put(response.getId(), response);
@@ -80,7 +80,7 @@ public class CommentProxy {
     }
 
 
-    @AfterReturning(pointcut = "@annotation(com.example.commentsproject.cache.proxy.annotation.CacheableAop) " +
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CacheEvict) " +
             "&& execution(* com.example.commentsproject.service.CommentService.deleteComment(Long)) && args(id)",
             argNames = "id")
     public void deleteComment(Long id) {
@@ -89,7 +89,7 @@ public class CommentProxy {
 
     }
 
-    @AfterReturning(pointcut = "@annotation(com.example.commentsproject.cache.proxy.annotation.CacheableAop) &&" +
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) &&" +
             " execution(* com.example.commentsproject.service.CommentService.updateComment(Long, ..)) && args(id, ..)",
             argNames = "id,retVal", returning = "retVal")
     public void updateComment(Long id, CommentResponseDto retVal) {
