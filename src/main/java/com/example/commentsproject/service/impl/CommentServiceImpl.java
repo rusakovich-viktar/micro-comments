@@ -1,12 +1,11 @@
 package com.example.commentsproject.service.impl;
 
 
-import com.example.commentsproject.cache.proxy.annotation.CacheableAop;
+import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import com.example.commentsproject.dto.request.CommentRequestDto;
 import com.example.commentsproject.dto.response.CommentResponseDto;
 import com.example.commentsproject.dto.response.NewsResponseDto;
 import com.example.commentsproject.entity.Comment;
-import com.example.commentsproject.exception.EntityNotFoundException;
 import com.example.commentsproject.mapper.CommentMapper;
 import com.example.commentsproject.repository.CommentRepository;
 import com.example.commentsproject.service.CommentService;
@@ -107,13 +106,13 @@ public class CommentServiceImpl implements CommentService {
                 .block();
 
         if (news == null) {
-            throw EntityNotFoundException.of(NewsResponseDto.class, newsId);
+            throw EntityNotFoundExceptionCustom.of(NewsResponseDto.class, newsId);
         }
     }
 
     private Comment getCommentById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> EntityNotFoundException.of(Comment.class, id));
+                .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
     }
 
     public Page<Comment> search(String queryString, Pageable pageable) {
