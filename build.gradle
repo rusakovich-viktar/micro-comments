@@ -39,6 +39,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    implementation 'by.clevertec:exception-handler-spring-boot-starter'
+    implementation project(path: ':exception-handler-spring-boot-starter')
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
