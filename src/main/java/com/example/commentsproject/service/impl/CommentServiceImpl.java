@@ -2,121 +2,119 @@ package com.example.commentsproject.service.impl;
 
 
 import by.clevertec.exception.EntityNotFoundExceptionCustom;
+import com.example.commentsproject.client.NewsClient;
 import com.example.commentsproject.dto.request.CommentRequestDto;
 import com.example.commentsproject.dto.response.CommentResponseDto;
 import com.example.commentsproject.dto.response.NewsResponseDto;
 import com.example.commentsproject.entity.Comment;
+import com.example.commentsproject.entity.News;
 import com.example.commentsproject.mapper.CommentMapper;
 import com.example.commentsproject.repository.CommentRepository;
 import com.example.commentsproject.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
 @EnableCaching
 public class CommentServiceImpl implements CommentService {
 
-    private final String PORT_OTHER_MICROSERVICE = "8081";
-    private final String PREFIX_HTTP = "http://";
-    @Value("${map.value}")
-    private String IP;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
-    private final WebClient webClient;
+    private final NewsClient newsClient;
+
 
     @Transactional
     @Override
     @CachePut(value = "comment", key = "#result.id")
     public CommentResponseDto createComment(Long newsId, CommentRequestDto commentRequestDto) {
 
-        findNewsById(newsId);
+        ResponseEntity<NewsResponseDto> response = newsClient.getNewsById(newsId);
+
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            throw EntityNotFoundExceptionCustom.of(NewsResponseDto.class, newsId);
+        }
+
+        NewsResponseDto newsResponseDto = response.getBody();
 
         Comment comment = commentMapper.toEntity(commentRequestDto);
-        comment.setNewsId(newsId);
+
+        News news = new News();
+        news.setId(newsResponseDto.getId());
+
+        comment.setNews(news);
+
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.toDto(savedComment);
     }
 
+
     @Transactional(readOnly = true)
     @Override
     @Cacheable(value = "comment")
-    public CommentResponseDto getCommentById(Long newsId, Long id) {
-
-        findNewsById(newsId);
-
-        Comment comment = getCommentById(id);
-
+    public CommentResponseDto getCommentById(Long id) {
+        Comment comment = commentRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        EntityNotFoundExceptionCustom.of(Comment.class, id));
         return commentMapper.toDto(comment);
     }
 
     @Transactional
     @Override
     @CachePut(value = "comment", key = "#id")
-    public CommentResponseDto updateComment(Long newsId, Long id, CommentRequestDto commentRequestDto) {
-
-        findNewsById(newsId);
-
-        Comment comment = getCommentById(id);
+    public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
 
         commentMapper.updateFromDto(commentRequestDto, comment);
         Comment updatedComment = commentRepository.save(comment);
         return commentMapper.toDto(updatedComment);
     }
 
-    @Transactional
-    @CacheEvict(value = "news", key = "#id")
+    @CacheEvict(value = "comment", key = "#id")
     @Override
-    public void deleteComment(Long newsId, Long id) {
-
-        findNewsById(newsId);
-
-        Comment comment = getCommentById(id);
-
+    @Transactional
+    public void deleteComment(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
         commentRepository.delete(comment);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Page<CommentResponseDto> getAllCommentsByNewsId(Long newsId, Pageable pageable) {
-
-        findNewsById(newsId);
-
-        Page<Comment> comments = commentRepository.findByNewsId(newsId, pageable);
-
-        return comments.map(commentMapper::toDto);
+    public Page<CommentResponseDto> getAllComment(Pageable pageable) {
+        return commentRepository.findAll(pageable)
+                .map(commentMapper::toDto);
     }
 
-    private void findNewsById(Long newsId) {
-        String newsServiceUrl = PREFIX_HTTP + IP + ":" + PORT_OTHER_MICROSERVICE + "/news";
-        String url = newsServiceUrl + "/" + newsId;
-        NewsResponseDto news = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(NewsResponseDto.class)
-                .block();
-
-        if (news == null) {
-            throw EntityNotFoundExceptionCustom.of(NewsResponseDto.class, newsId);
-        }
+    @Transactional
+    @Override
+    public void deleteCommentsByNewsId(Long newsId) {
+        commentRepository.deleteByNewsId(newsId);
     }
 
-    private Comment getCommentById(Long id) {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<CommentResponseDto> getCommentsByNewsId(Long newsId, Pageable pageable) {
+        return commentRepository.findByNewsId(newsId, pageable)
+                .map(commentMapper::toDto);
+
     }
 
     public Page<Comment> search(String queryString, Pageable pageable) {
         return commentRepository.search(queryString, pageable);
     }
+
 
 }

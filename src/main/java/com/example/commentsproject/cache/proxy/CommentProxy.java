@@ -36,7 +36,7 @@ public class CommentProxy {
 
     @SuppressWarnings("checkstyle:IllegalCatch")
     @Around("@annotation(org.springframework.cache.annotation.Cacheable) " +
-            "&& execution(* com.example.commentsproject.service.CommentService.getCommentById(..))")
+            "&& execution(* com.example.commentsproject.service.CommentService._getCommentById(..))")
     public Object getComment(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Long id = (Long) args[0];

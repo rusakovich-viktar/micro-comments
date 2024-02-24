@@ -1,23 +1,22 @@
 package com.example.commentsproject.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-public class CommentRequestDto implements Serializable {
+public class NewsRequestDto implements Serializable {
+
+    @NotBlank(message = "Title cannot be blank")
+    private String title;
 
     @NotBlank(message = "Text cannot be blank")
-    @Size(min = 5, message = "Text should be minimum 5 symbols")
     private String text;
-
-    private String username;
-
-    private Long newsId;
 
 }

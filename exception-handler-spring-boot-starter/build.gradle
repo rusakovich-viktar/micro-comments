@@ -18,6 +18,7 @@ repositories {
 publishing {
     publications {
         customExceptionHandler(MavenPublication) {
+            from components.java
         }
     }
 }

@@ -12,6 +12,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findByNewsId(Long newsId, Pageable pageable);
 
+    void deleteByNewsId(Long newsId);
+
     @Query(value = "SELECT c FROM Comment c WHERE " +
             "(:queryString is null or lower(c.text) like lower(concat('%', :queryString, '%'))) or " +
             "(:queryString is null or lower(c.username) like lower(concat('%', :queryString, '%')))")

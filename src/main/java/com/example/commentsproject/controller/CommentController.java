@@ -1,8 +1,8 @@
 package com.example.commentsproject.controller;
 
+
 import com.example.commentsproject.dto.request.CommentRequestDto;
 import com.example.commentsproject.dto.response.CommentResponseDto;
-import com.example.commentsproject.entity.Comment;
 import com.example.commentsproject.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,43 +17,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/news/{newsId}/comments")
+@RequestMapping("/api/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
-    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long newsId, @Valid @RequestBody CommentRequestDto commentRequestDto) {
+
+    @PostMapping("/news/{newsId}")
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long newsId,
+                                                            @Valid @RequestBody CommentRequestDto commentRequestDto) {
         return new ResponseEntity<>(
                 commentService.createComment(newsId, commentRequestDto),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Long newsId, @PathVariable Long id) {
-        return ResponseEntity.ok(commentService.getCommentById(newsId, id));
+    public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Long id) {
+        return ResponseEntity.ok(commentService.getCommentById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long newsId, @PathVariable Long id, @Valid @RequestBody CommentRequestDto commentRequestDto) {
-        return ResponseEntity.ok(commentService.updateComment(newsId, id, commentRequestDto));
+    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long id,
+                                                            @Valid @RequestBody CommentRequestDto commentRequestDto) {
+        return ResponseEntity.ok(commentService.updateComment(id, commentRequestDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long newsId, @PathVariable Long id) {
-        commentService.deleteComment(newsId, id);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<CommentResponseDto>> getAllComments(@PathVariable Long newsId, Pageable pageable) {
-        return ResponseEntity.ok(commentService.getAllCommentsByNewsId(newsId, pageable));
+    public ResponseEntity<Page<CommentResponseDto>> getAllComment(Pageable pageable) {
+        return ResponseEntity.ok(commentService.getAllComment(pageable));
     }
 
+    @DeleteMapping("/news/{newsId}")
+    public ResponseEntity<Void> deleteCommentsByNewsId(@PathVariable Long newsId) {
+        commentService.deleteCommentsByNewsId(newsId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/news/{newsId}")
+    ResponseEntity<Page<CommentResponseDto>> getCommentsByNewsId(@PathVariable Long newsId, Pageable pageable) {
+        return ResponseEntity.ok(commentService.getCommentsByNewsId(newsId, pageable));
+    }
 
 }

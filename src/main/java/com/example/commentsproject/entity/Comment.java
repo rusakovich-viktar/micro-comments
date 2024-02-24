@@ -2,9 +2,12 @@ package com.example.commentsproject.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -36,8 +39,9 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String username;
 
-    @Column(name = "news_id", nullable = false)
-    private Long newsId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "news_id", nullable = false)
+    private News news;
 
     @PrePersist
     public void prePersist() {

@@ -5,6 +5,7 @@ spring:
     password: postgres
   liquibase:
     contexts: prod
+  #    enabled: false
   jpa:
     properties:
       hibernate:
@@ -15,6 +16,3 @@ spring:
   data:
     redis:
       host: redis
-
-map:
-  value: micro-news
