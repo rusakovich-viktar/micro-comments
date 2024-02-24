@@ -1,2 +1,3 @@
 rootProject.name = 'comments-project'
-include 'exception-handler-spring-boot-starter'
+
+//include 'exception-handler-spring-boot-starter'

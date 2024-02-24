@@ -1,6 +1,5 @@
 package com.example.commentsproject.service.impl;
 
-
 import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import com.example.commentsproject.client.NewsClient;
 import com.example.commentsproject.dto.request.CommentRequestDto;
