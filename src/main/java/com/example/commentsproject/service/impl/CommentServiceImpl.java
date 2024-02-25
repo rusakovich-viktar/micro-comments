@@ -111,9 +111,4 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    public Page<Comment> search(String queryString, Pageable pageable) {
-        return commentRepository.search(queryString, pageable);
-    }
-
-
 }
