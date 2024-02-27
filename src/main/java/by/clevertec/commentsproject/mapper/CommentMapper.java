@@ -22,8 +22,6 @@ public interface CommentMapper {
     @Mapping(source = "newsId", target = "news.id")
     Comment toEntity(CommentRequestDto dto);
 
-    List<CommentResponseDto> toDtoList(List<Comment> comments);
-
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "news", ignore = true)

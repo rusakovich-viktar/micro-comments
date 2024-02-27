@@ -29,6 +29,8 @@ public class TestConstant {
         public static final String ONE = "one";
         public static final String TWO = "two";
         public static final String THREE = "three";
+        public static final String PAGE = "page";
+        public static final String SIZE = "size";
     }
 
     @UtilityClass
@@ -36,6 +38,11 @@ public class TestConstant {
 
         public static final String API_NEWS_URL = "/api/news/";
         public static final String API_NEWS = "/api/news";
+
+        public static final String API_COMMENTS_URL = "/api/comments/";
+        public static final String API_COMMENTS = "/api/comments";
+        public static final String API_COMMENTS_NEWS_URL = "/api/comments/news/";
+        public static final String API_COMMENTS_NEWS = "/api/comments/news";
         public static final String HTTP_LOCALHOST = "http://localhost:";
     }
 

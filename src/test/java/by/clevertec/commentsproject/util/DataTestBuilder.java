@@ -52,7 +52,7 @@ public class DataTestBuilder {
         return news;
     }
 
-    public Comment buildComment() {
+    public Comment buildComment(News news) {
         Comment comment = new Comment();
 
         comment.setId(id);
@@ -60,7 +60,7 @@ public class DataTestBuilder {
         comment.setUpdateTime(updateTime);
         comment.setText(text);
         comment.setUsername(username);
-        comment.setNews(new News());
+        comment.setNews(news);
 
         return comment;
     }
