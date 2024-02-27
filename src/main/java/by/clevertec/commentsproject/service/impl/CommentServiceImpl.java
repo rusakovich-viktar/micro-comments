@@ -1,6 +1,5 @@
 package by.clevertec.commentsproject.service.impl;
 
-import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import by.clevertec.commentsproject.client.NewsClient;
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
 import by.clevertec.commentsproject.dto.response.CommentResponseDto;
@@ -10,6 +9,7 @@ import by.clevertec.commentsproject.entity.News;
 import by.clevertec.commentsproject.mapper.CommentMapper;
 import by.clevertec.commentsproject.repository.CommentRepository;
 import by.clevertec.commentsproject.service.CommentService;
+import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

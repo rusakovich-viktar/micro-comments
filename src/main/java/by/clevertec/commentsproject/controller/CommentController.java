@@ -1,8 +1,8 @@
 package by.clevertec.commentsproject.controller;
 
 
-import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
+import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import by.clevertec.commentsproject.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

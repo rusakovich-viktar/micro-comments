@@ -14,5 +14,5 @@ spring:
             hosts: localhost:9200
 
 cache:
-  algorithm: LRU
+  algorithm: LFU
   capacity: 50
