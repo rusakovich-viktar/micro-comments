@@ -42,8 +42,9 @@ class CommentProxyTest {
     @MockBean
     private final CommentService commentService;
 
+
     @MockBean
-    private ProceedingJoinPoint proceedingJoinPoint;
+    private final ProceedingJoinPoint proceedingJoinPoint;
 
     private final StampedLock lock = new StampedLock();
 
@@ -79,39 +80,6 @@ class CommentProxyTest {
         }
 
         @Test
-        void testCreateComment() throws Throwable {
-
-            News news = DataTestBuilder.builder()
-                    .build()
-                    .buildNews();
-
-            Comment comment = DataTestBuilder.builder()
-                    .build()
-                    .buildComment(news);
-
-            CommentResponseDto expected = DataTestBuilder.builder()
-                    .build()
-                    .buildCommentResponseDto();
-
-            CommentRequestDto commentRequestDto = DataTestBuilder.builder()
-                    .build()
-                    .buildCommentRequestDto();
-
-            when(commentMapper.toEntity(commentRequestDto)).thenReturn(comment);
-            when(commentService.getCommentById(comment.getId())).thenReturn(expected);
-
-            commentProxy.createComment(expected);
-
-            when(proceedingJoinPoint.getArgs()).thenReturn(new Object[]{comment.getId()});
-            when(proceedingJoinPoint.proceed()).thenReturn(expected);
-
-            CommentResponseDto result = (CommentResponseDto) commentProxy.getComment(proceedingJoinPoint);
-
-            assertEquals(expected.getId(), result.getId());
-
-        }
-
-        @Test
         void testGetCommentReturnCommentFromCache_whenOptimisticLockInvalidated() throws Throwable {
             CommentResponseDto commentResponseDto = DataTestBuilder.builder()
                     .build()
@@ -124,7 +92,6 @@ class CommentProxyTest {
 
             commentProxy.createComment(commentResponseDto);
 
-            // Invalidate the optimistic lock
             lock.writeLock();
 
             Object result = commentProxy.getComment(proceedingJoinPoint);
@@ -140,8 +107,41 @@ class CommentProxyTest {
 
             verify(proceedingJoinPoint, times(0)).proceed();
         }
+
     }
 
+    @Test
+    void testCreateComment() throws Throwable {
+
+        News news = DataTestBuilder.builder()
+                .build()
+                .buildNews();
+
+        Comment comment = DataTestBuilder.builder()
+                .build()
+                .buildComment(news);
+
+        CommentResponseDto expected = DataTestBuilder.builder()
+                .build()
+                .buildCommentResponseDto();
+
+        CommentRequestDto commentRequestDto = DataTestBuilder.builder()
+                .build()
+                .buildCommentRequestDto();
+
+        when(commentMapper.toEntity(commentRequestDto)).thenReturn(comment);
+        when(commentService.getCommentById(comment.getId())).thenReturn(expected);
+
+        commentProxy.createComment(expected);
+
+        when(proceedingJoinPoint.getArgs()).thenReturn(new Object[]{comment.getId()});
+        when(proceedingJoinPoint.proceed()).thenReturn(expected);
+
+        CommentResponseDto result = (CommentResponseDto) commentProxy.getComment(proceedingJoinPoint);
+
+        assertEquals(expected.getId(), result.getId());
+
+    }
 
     @Test
     void testDeleteComment() throws Exception {

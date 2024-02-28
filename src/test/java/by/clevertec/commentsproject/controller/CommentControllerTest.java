@@ -124,8 +124,10 @@ class CommentControllerTest {
             ResponseEntity<NewsResponseDto> responseEntity = ResponseEntity.ok(newsResponseDto);
 
             // when
-            when(newsClient.getNewsById(anyLong())).thenReturn(responseEntity);
-            when(commentService.createComment(anyLong(), any(CommentRequestDto.class))).thenReturn(expected);
+            when(newsClient.getNewsById(anyLong()))
+                    .thenReturn(responseEntity);
+            when(commentService.createComment(anyLong(), any(CommentRequestDto.class)))
+                    .thenReturn(expected);
 
             mockMvc.perform(post(API_COMMENTS_NEWS_URL + expected.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -238,7 +240,8 @@ class CommentControllerTest {
             Page<CommentResponseDto> page = new PageImpl<>(expectedComment);
 
             // when
-            when(commentService.getAllComment(any(Pageable.class))).thenReturn(page);
+            when(commentService.getAllComment(any(Pageable.class)))
+                    .thenReturn(page);
 
 
             // then
@@ -262,7 +265,8 @@ class CommentControllerTest {
         void getAllCommentShouldReturnEmptyPage_whenNoComments() throws Exception {
             Page<CommentResponseDto> page = Page.empty();
 
-            when(commentService.getAllComment(any(Pageable.class))).thenReturn(page);
+            when(commentService.getAllComment(any(Pageable.class)))
+                    .thenReturn(page);
 
             mockMvc.perform(get(API_COMMENTS)
                             .contentType(MediaType.APPLICATION_JSON))
@@ -274,7 +278,8 @@ class CommentControllerTest {
         void getAllCommentShouldReturnEmptyPage_whenPageOutOfRange() throws Exception {
             Page<CommentResponseDto> page = Page.empty();
 
-            when(commentService.getAllComment(any(Pageable.class))).thenReturn(page);
+            when(commentService.getAllComment(any(Pageable.class)))
+                    .thenReturn(page);
 
             mockMvc.perform(get(API_COMMENTS)
                             .param(PAGE, "100")
@@ -301,7 +306,9 @@ class CommentControllerTest {
             Page<CommentResponseDto> page = new PageImpl<>(expectedComment);
 
             // when
-            when(commentService.getCommentsByNewsId(responseDto.getNewsId(), PageRequest.of(0, 5))).thenReturn(page);
+            when(commentService.getCommentsByNewsId(responseDto.getNewsId(),
+                    PageRequest.of(0, 5)))
+                    .thenReturn(page);
 
             // then
             mockMvc.perform(get(API_COMMENTS_NEWS_URL + responseDto.getNewsId())
@@ -317,6 +324,8 @@ class CommentControllerTest {
 
         @Test
         void getCommentsByNewsIdShouldReturnEmptyPage_whenNoComments() throws Exception {
+
+            // given
             Long newsId = 1L;
             Page<CommentResponseDto> page = Page.empty();
 
@@ -330,6 +339,8 @@ class CommentControllerTest {
 
         @Test
         void getCommentsByNewsIdShouldReturnEmptyPage_whenPageOutOfRange() throws Exception {
+
+            // given
             Long newsId = 1L;
             Page<CommentResponseDto> page = Page.empty();
 
@@ -345,6 +356,8 @@ class CommentControllerTest {
 
         @Test
         void getCommentsByNewsIdShouldReturnNotFound_whenInvalidNewsId() throws Exception {
+
+            // given
             Long invalidNewsId = -1L;
             when(commentService.getCommentsByNewsId(anyLong(), any(Pageable.class)))
                     .thenThrow(EntityNotFoundExceptionCustom.of(NewsResponseDto.class, invalidNewsId));
@@ -361,9 +374,12 @@ class CommentControllerTest {
 
         @Test
         void deleteCommentsByNewsIdShouldReturnNoContentWhenCommentsExist() throws Exception {
+
+            // given
             Long newsId = 1L;
 
-            doNothing().when(commentService).deleteCommentsByNewsId(newsId);
+            doNothing()
+                    .when(commentService).deleteCommentsByNewsId(newsId);
 
             mockMvc.perform(delete(API_COMMENTS_NEWS_URL + newsId))
                     .andExpect(status().isNoContent());
@@ -371,8 +387,12 @@ class CommentControllerTest {
 
         @Test
         void deleteCommentsByNewsIdShouldReturnNoContentWhenInvalidNewsId() throws Exception {
+
+            // given
             Long invalidNewsId = -1L;
-            doNothing().when(commentService).deleteCommentsByNewsId(invalidNewsId);
+
+            doNothing()
+                    .when(commentService).deleteCommentsByNewsId(invalidNewsId);
 
             mockMvc.perform(delete(API_COMMENTS_NEWS_URL + invalidNewsId))
                     .andExpect(status().isNoContent());

@@ -4,7 +4,6 @@ package by.clevertec.commentsproject.mapper;
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
 import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import by.clevertec.commentsproject.entity.Comment;
-import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
