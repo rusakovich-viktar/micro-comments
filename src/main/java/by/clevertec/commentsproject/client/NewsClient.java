@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "micro-news", url = "http://localhost:8081")
 public interface NewsClient {
 
-    @GetMapping("/api/news/{id}")
+    @GetMapping("/news/{id}")
     ResponseEntity<NewsResponseDto> getNewsById(@PathVariable Long id);
 
 
