@@ -6,10 +6,10 @@ import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.P
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.PREFIX_NOT_FOUND_CUSTOM_MESSAGE;
 import static by.clevertec.commentsproject.util.TestConstant.ID_ONE;
 import static by.clevertec.commentsproject.util.TestConstant.INVALID_ID;
-import static by.clevertec.commentsproject.util.TestConstant.Path.API_COMMENTS;
-import static by.clevertec.commentsproject.util.TestConstant.Path.API_COMMENTS_NEWS;
-import static by.clevertec.commentsproject.util.TestConstant.Path.API_COMMENTS_NEWS_URL;
-import static by.clevertec.commentsproject.util.TestConstant.Path.API_COMMENTS_URL;
+import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS;
+import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS;
+import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS_URL;
+import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_URL;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,7 +76,7 @@ class CommentControllerTest {
                     .thenReturn(expected);
 
             // then
-            mockMvc.perform(get(API_COMMENTS_URL + expected.getId()))
+            mockMvc.perform(get(COMMENTS_URL + expected.getId()))
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(expected)));
 
@@ -86,7 +86,7 @@ class CommentControllerTest {
         void getByIdShouldThrowNotFound_whenInvalidId() throws Exception {
 
             Long invalidId = INVALID_ID;
-            String url = API_COMMENTS_URL + invalidId;
+            String url = COMMENTS_URL + invalidId;
             EntityNotFoundExceptionCustom exception = new EntityNotFoundExceptionCustom
                     ("Comment" + PREFIX_NOT_FOUND_CUSTOM_MESSAGE + invalidId + POSTFIX_NOT_FOUND_CUSTOM_MESSAGE);
 
@@ -129,7 +129,7 @@ class CommentControllerTest {
             when(commentService.createComment(anyLong(), any(CommentRequestDto.class)))
                     .thenReturn(expected);
 
-            mockMvc.perform(post(API_COMMENTS_NEWS_URL + expected.getId())
+            mockMvc.perform(post(COMMENTS_NEWS_URL + expected.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestDto)))
                     .andExpect(status().isCreated())
@@ -144,7 +144,7 @@ class CommentControllerTest {
             CommentRequestDto invalidCommentRequestDto = new CommentRequestDto();
 
             // then
-            mockMvc.perform(post(API_COMMENTS_NEWS)
+            mockMvc.perform(post(COMMENTS_NEWS)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidCommentRequestDto)))
                     .andExpect(status().isMethodNotAllowed());
@@ -174,7 +174,7 @@ class CommentControllerTest {
                     .thenReturn(expected);
 
             // then
-            mockMvc.perform(put(API_COMMENTS_URL + 1L)
+            mockMvc.perform(put(COMMENTS_URL + 1L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(commentRequestDto)))
                     .andExpect(status().isOk())
@@ -190,7 +190,7 @@ class CommentControllerTest {
             CommentRequestDto invalidCommentRequestDto = new CommentRequestDto();
 
             // when
-            mockMvc.perform(put(API_COMMENTS_URL + ID_ONE)
+            mockMvc.perform(put(COMMENTS_URL + ID_ONE)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidCommentRequestDto)))
                     .andExpect(status().isBadRequest());
@@ -209,7 +209,7 @@ class CommentControllerTest {
 
 
             // when
-            mockMvc.perform(delete(API_COMMENTS_URL + ID_ONE))
+            mockMvc.perform(delete(COMMENTS_URL + ID_ONE))
                     .andExpect(status().isNoContent());
 
             // then
@@ -245,7 +245,7 @@ class CommentControllerTest {
 
 
             // then
-            mockMvc.perform(get(API_COMMENTS)
+            mockMvc.perform(get(COMMENTS)
                             .param(PAGE, String.valueOf(pageNumber))
                             .param(SIZE, String.valueOf(pageSize)))
                     .andExpect(status().isOk())
@@ -268,7 +268,7 @@ class CommentControllerTest {
             when(commentService.getAllComment(any(Pageable.class)))
                     .thenReturn(page);
 
-            mockMvc.perform(get(API_COMMENTS)
+            mockMvc.perform(get(COMMENTS)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(0)));
@@ -281,7 +281,7 @@ class CommentControllerTest {
             when(commentService.getAllComment(any(Pageable.class)))
                     .thenReturn(page);
 
-            mockMvc.perform(get(API_COMMENTS)
+            mockMvc.perform(get(COMMENTS)
                             .param(PAGE, "100")
                             .param(SIZE, "5")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -311,7 +311,7 @@ class CommentControllerTest {
                     .thenReturn(page);
 
             // then
-            mockMvc.perform(get(API_COMMENTS_NEWS_URL + responseDto.getNewsId())
+            mockMvc.perform(get(COMMENTS_NEWS_URL + responseDto.getNewsId())
                             .param(PAGE, "0")
                             .param(SIZE, "5"))
                     .andExpect(status().isOk())
@@ -331,7 +331,7 @@ class CommentControllerTest {
 
             when(commentService.getCommentsByNewsId(anyLong(), any(Pageable.class))).thenReturn(page);
 
-            mockMvc.perform(get(API_COMMENTS_NEWS_URL + newsId)
+            mockMvc.perform(get(COMMENTS_NEWS_URL + newsId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(0)));
@@ -346,7 +346,7 @@ class CommentControllerTest {
 
             when(commentService.getCommentsByNewsId(anyLong(), any(Pageable.class))).thenReturn(page);
 
-            mockMvc.perform(get(API_COMMENTS_NEWS_URL + newsId)
+            mockMvc.perform(get(COMMENTS_NEWS_URL + newsId)
                             .param(PAGE, "100")
                             .param(SIZE, "5")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -362,7 +362,7 @@ class CommentControllerTest {
             when(commentService.getCommentsByNewsId(anyLong(), any(Pageable.class)))
                     .thenThrow(EntityNotFoundExceptionCustom.of(NewsResponseDto.class, invalidNewsId));
 
-            mockMvc.perform(get(API_COMMENTS_NEWS_URL + invalidNewsId)
+            mockMvc.perform(get(COMMENTS_NEWS_URL + invalidNewsId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
         }
@@ -381,7 +381,7 @@ class CommentControllerTest {
             doNothing()
                     .when(commentService).deleteCommentsByNewsId(newsId);
 
-            mockMvc.perform(delete(API_COMMENTS_NEWS_URL + newsId))
+            mockMvc.perform(delete(COMMENTS_NEWS_URL + newsId))
                     .andExpect(status().isNoContent());
         }
 
@@ -394,7 +394,7 @@ class CommentControllerTest {
             doNothing()
                     .when(commentService).deleteCommentsByNewsId(invalidNewsId);
 
-            mockMvc.perform(delete(API_COMMENTS_NEWS_URL + invalidNewsId))
+            mockMvc.perform(delete(COMMENTS_NEWS_URL + invalidNewsId))
                     .andExpect(status().isNoContent());
         }
 

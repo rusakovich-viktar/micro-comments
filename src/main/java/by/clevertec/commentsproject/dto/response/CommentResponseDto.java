@@ -15,9 +15,7 @@ import lombok.ToString;
 public class CommentResponseDto implements Serializable {
 
     private Long id;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     private String text;
     private String username;

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -57,12 +57,14 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getAllComment(pageable));
     }
 
+    /*не использовать напрямую, только как эндпоинт через feign > не проверяет наличие новости, проверка происходит при вызове с микросервиса новостей*/
     @DeleteMapping("/news/{newsId}")
     public ResponseEntity<Void> deleteCommentsByNewsId(@PathVariable Long newsId) {
         commentService.deleteCommentsByNewsId(newsId);
         return ResponseEntity.noContent().build();
     }
 
+    /*не использовать напрямую, только как эндпоинт через feign > не проверяет наличие новости, проверка происходит по такому же запросу через сервер новостей*/
     @GetMapping("/news/{newsId}")
     ResponseEntity<Page<CommentResponseDto>> getCommentsByNewsId(@PathVariable Long newsId, Pageable pageable) {
         return ResponseEntity.ok(commentService.getCommentsByNewsId(newsId, pageable));
