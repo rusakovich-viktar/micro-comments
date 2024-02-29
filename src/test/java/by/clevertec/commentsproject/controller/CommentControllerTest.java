@@ -10,7 +10,6 @@ import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.P
 import static by.clevertec.commentsproject.util.TestConstant.ID_ONE;
 import static by.clevertec.commentsproject.util.TestConstant.INVALID_ID;
 import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS;
-import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS;
 import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS_URL;
 import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_URL;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -52,7 +51,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RequiredArgsConstructor
 @WebMvcTest(CommentController.class)

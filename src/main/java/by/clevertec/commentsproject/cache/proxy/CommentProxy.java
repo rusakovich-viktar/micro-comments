@@ -7,7 +7,7 @@ import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.StampedLock;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 
-@Log4j2
+@Slf4j
 @Aspect
 @RequiredArgsConstructor
 @Component
@@ -36,7 +36,7 @@ public class CommentProxy {
 
     @SuppressWarnings("checkstyle:IllegalCatch")
     @Around("@annotation(org.springframework.cache.annotation.Cacheable) " +
-            "&& execution(* by.clevertec.commentsproject.service.CommentService._getCommentById(..))")
+            "&& execution(* by.clevertec.commentsproject.service.CommentService.getCommentById(..))")
     public Object getComment(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Long id = (Long) args[0];
