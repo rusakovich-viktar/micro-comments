@@ -3,6 +3,8 @@ package by.clevertec.commentsproject.service.impl;
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.POSTFIX_NOT_FOUND_CUSTOM_MESSAGE;
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.PREFIX_NOT_FOUND_CUSTOM_MESSAGE;
 import static by.clevertec.commentsproject.util.TestConstant.ID_ONE;
+import static by.clevertec.commentsproject.util.TestConstant.NEW_TEXT;
+import static by.clevertec.commentsproject.util.TestConstant.NEW_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +42,7 @@ import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceImplTest {
+
 
     @Mock
     private CommentRepository commentRepository;
@@ -184,8 +187,8 @@ class CommentServiceImplTest {
         void testUpdateCommentShouldReturnCommentResponseDto_whenCorrectCommentRequestDto() {
             // given
             CommentRequestDto commentRequestDto = DataTestBuilder.builder()
-                    .withTitle("new title")
-                    .withText("new text")
+                    .withTitle(NEW_TITLE)
+                    .withText(NEW_TEXT)
                     .build()
                     .buildCommentRequestDto();
 
