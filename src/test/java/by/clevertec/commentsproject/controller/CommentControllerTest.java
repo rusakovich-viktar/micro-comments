@@ -1,7 +1,10 @@
 package by.clevertec.commentsproject.controller;
 
+import static by.clevertec.commentsproject.util.TestConstant.Attributes.FIVE;
+import static by.clevertec.commentsproject.util.TestConstant.Attributes.ONE_ZERO_ZERO;
 import static by.clevertec.commentsproject.util.TestConstant.Attributes.PAGE;
 import static by.clevertec.commentsproject.util.TestConstant.Attributes.SIZE;
+import static by.clevertec.commentsproject.util.TestConstant.COMMENT;
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.POSTFIX_NOT_FOUND_CUSTOM_MESSAGE;
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.PREFIX_NOT_FOUND_CUSTOM_MESSAGE;
 import static by.clevertec.commentsproject.util.TestConstant.ID_ONE;
@@ -32,6 +35,7 @@ import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import by.clevertec.commentsproject.dto.response.NewsResponseDto;
 import by.clevertec.commentsproject.service.CommentService;
 import by.clevertec.commentsproject.util.DataTestBuilder;
+import by.clevertec.commentsproject.util.TestConstant;
 import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
@@ -48,10 +52,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RequiredArgsConstructor
 @WebMvcTest(CommentController.class)
 class CommentControllerTest {
+
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
@@ -88,7 +94,7 @@ class CommentControllerTest {
             Long invalidId = INVALID_ID;
             String url = COMMENTS_URL + invalidId;
             EntityNotFoundExceptionCustom exception = new EntityNotFoundExceptionCustom
-                    ("Comment" + PREFIX_NOT_FOUND_CUSTOM_MESSAGE + invalidId + POSTFIX_NOT_FOUND_CUSTOM_MESSAGE);
+                    (COMMENT + PREFIX_NOT_FOUND_CUSTOM_MESSAGE + invalidId + POSTFIX_NOT_FOUND_CUSTOM_MESSAGE);
 
             // when
             when(commentService.getCommentById(invalidId))
@@ -144,7 +150,7 @@ class CommentControllerTest {
             CommentRequestDto invalidCommentRequestDto = new CommentRequestDto();
 
             // then
-            mockMvc.perform(post(COMMENTS_NEWS)
+            mockMvc.perform(post(COMMENTS_NEWS_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidCommentRequestDto)))
                     .andExpect(status().isMethodNotAllowed());
@@ -282,8 +288,8 @@ class CommentControllerTest {
                     .thenReturn(page);
 
             mockMvc.perform(get(COMMENTS)
-                            .param(PAGE, "100")
-                            .param(SIZE, "5")
+                            .param(PAGE, ONE_ZERO_ZERO)
+                            .param(SIZE, FIVE)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(0)));
@@ -312,8 +318,8 @@ class CommentControllerTest {
 
             // then
             mockMvc.perform(get(COMMENTS_NEWS_URL + responseDto.getNewsId())
-                            .param(PAGE, "0")
-                            .param(SIZE, "5"))
+                            .param(PAGE, TestConstant.Attributes.ZERO)
+                            .param(SIZE, FIVE))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(1)))
                     .andExpect(jsonPath("$.content[0].id").value(responseDto.getId().intValue()))
@@ -347,8 +353,8 @@ class CommentControllerTest {
             when(commentService.getCommentsByNewsId(anyLong(), any(Pageable.class))).thenReturn(page);
 
             mockMvc.perform(get(COMMENTS_NEWS_URL + newsId)
-                            .param(PAGE, "100")
-                            .param(SIZE, "5")
+                            .param(PAGE, ONE_ZERO_ZERO)
+                            .param(SIZE, FIVE)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(0)));

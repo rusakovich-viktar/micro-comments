@@ -17,7 +17,7 @@ class CommentMapperTest {
 
 
     @Test
-    void testToDtoShouldReturnCoResponseDto() {
+    void testToDtoShouldReturnResponseDto() {
         News news = DataTestBuilder.builder()
                 .build()
                 .buildNews();
