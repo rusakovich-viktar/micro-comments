@@ -26,7 +26,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("dev")
 @SpringBootTest
 @RequiredArgsConstructor
 class CommentProxyTest {
@@ -42,12 +44,10 @@ class CommentProxyTest {
     @MockBean
     private final CommentService commentService;
 
-
     @MockBean
     private final ProceedingJoinPoint proceedingJoinPoint;
 
     private final StampedLock lock = new StampedLock();
-
 
     @Nested
     class TestGetComment {
@@ -193,6 +193,5 @@ class CommentProxyTest {
 
         assertEquals(expected, userCache.get(comment.getId()));
     }
-
 
 }

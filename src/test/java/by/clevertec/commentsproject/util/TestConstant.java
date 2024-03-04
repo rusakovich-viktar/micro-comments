@@ -45,9 +45,7 @@ public class TestConstant {
         public static final String COMMENTS_URL = "/comments/";
         public static final String COMMENTS = "/comments";
         public static final String COMMENTS_NEWS_URL = "/comments/news/";
-        public static final String COMMENTS_NEWS = "/comments/news";
         public static final String HTTP_LOCALHOST = "http://localhost:";
-
         public static final String NEWS = "/news/";
     }
 

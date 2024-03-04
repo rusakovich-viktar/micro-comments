@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'by.clevertec'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
     sourceCompatibility = '17'
@@ -25,6 +25,7 @@ repositories {
 
 ext {
     mapstructVersion = '1.5.3.Final'
+    cloudVersion = '4.1.0'
 }
 
 dependencies {
@@ -33,20 +34,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
-
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${cloudVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     implementation 'by.clevertec:exception-handler-spring-boot-starter:0.0.1'
     implementation 'by.clevertec:logger-aspect-spring-boot-starter:0.0.1'
-
     implementation 'com.google.code.gson:gson:2.10.1'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.liquibase:liquibase-core'
@@ -63,7 +60,6 @@ compileJava {
     options.compilerArgs += [
             '-Amapstruct.suppressGeneratorTimestamp=true',
             '-Amapstruct.suppressGeneratorVersionInfoComment=true',
-            '-Amapstruct.verbose=true'
     ]
 }
 
