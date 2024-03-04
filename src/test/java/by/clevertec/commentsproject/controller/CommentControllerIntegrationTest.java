@@ -1,7 +1,6 @@
 package by.clevertec.commentsproject.controller;
 
 import static by.clevertec.commentsproject.util.TestConstant.ExceptionMessages.EXCEPTION_OCCURRED_DURING_TEST;
-import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS;
 import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_NEWS_URL;
 import static by.clevertec.commentsproject.util.TestConstant.Path.COMMENTS_URL;
 import static by.clevertec.commentsproject.util.TestConstant.Path.HTTP_LOCALHOST;
@@ -28,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentControllerIntegrationTest {
-
 
     private final TestRestTemplate restTemplate;
 

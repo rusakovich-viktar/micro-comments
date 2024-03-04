@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-
 @Slf4j
 @Aspect
 @RequiredArgsConstructor
@@ -33,10 +32,9 @@ public class CommentProxy {
     private final AtomicReference<Cache<Long, Object>> userCache = new AtomicReference<>(createCache());
     private final StampedLock lock = new StampedLock();
 
-
     @SuppressWarnings("checkstyle:IllegalCatch")
-    @Around("@annotation(org.springframework.cache.annotation.Cacheable) " +
-            "&& execution(* by.clevertec.commentsproject.service.CommentService.getCommentById(..))")
+    @Around("@annotation(org.springframework.cache.annotation.Cacheable) "
+            + "&& execution(* by.clevertec.commentsproject.service.CommentService.getCommentById(..))")
     public Object getComment(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Long id = (Long) args[0];
@@ -70,18 +68,17 @@ public class CommentProxy {
         return result;
     }
 
-
-    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) && " +
-            "execution(* by.clevertec.commentsproject.service.CommentService.createComment(..))", returning = "response")
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) && "
+            + "execution(* by.clevertec.commentsproject.service.CommentService.createComment(..))",
+            returning = "response")
     public void createComment(CommentResponseDto response) {
         userCache.get().put(response.getId(), response);
         log.info("Comment with id {} was added to cache", response.getId());
 
     }
 
-
-    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CacheEvict) " +
-            "&& execution(* by.clevertec.commentsproject.service.CommentService.deleteComment(Long)) && args(id)",
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CacheEvict) "
+            + "&& execution(* by.clevertec.commentsproject.service.CommentService.deleteComment(Long)) && args(id)",
             argNames = "id")
     public void deleteComment(Long id) {
         userCache.get().remove(id);
@@ -89,13 +86,12 @@ public class CommentProxy {
 
     }
 
-    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) &&" +
-            " execution(* by.clevertec.commentsproject.service.CommentService.updateComment(Long, ..)) && args(id, ..)",
+    @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) &&"
+            + " execution(* by.clevertec.commentsproject.service.CommentService.updateComment(Long, ..)) && args(id, ..)",
             argNames = "id,retVal", returning = "retVal")
     public void updateComment(Long id, CommentResponseDto retVal) {
         userCache.get().put(id, retVal);
         log.info("Comment with id {} was updated in cache", id);
-
 
     }
 

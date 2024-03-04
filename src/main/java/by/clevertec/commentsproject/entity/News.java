@@ -28,5 +28,4 @@ public class News implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "news")
     private List<Comment> comments;
 
-
 }

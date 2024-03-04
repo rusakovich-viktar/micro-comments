@@ -4,7 +4,6 @@ import by.clevertec.commentsproject.cache.Cache;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 public class LruCache<K, V> extends LinkedHashMap<K, V> implements Cache<K, V> {
 
     private final int capacity;

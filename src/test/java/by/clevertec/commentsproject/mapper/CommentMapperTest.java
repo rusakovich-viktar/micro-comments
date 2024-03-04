@@ -15,7 +15,6 @@ class CommentMapperTest {
 
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
-
     @Test
     void testToDtoShouldReturnResponseDto() {
         News news = DataTestBuilder.builder()

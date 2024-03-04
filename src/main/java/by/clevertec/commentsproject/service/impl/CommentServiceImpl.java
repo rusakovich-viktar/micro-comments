@@ -9,6 +9,7 @@ import by.clevertec.commentsproject.entity.News;
 import by.clevertec.commentsproject.mapper.CommentMapper;
 import by.clevertec.commentsproject.repository.CommentRepository;
 import by.clevertec.commentsproject.service.CommentService;
+import by.clevertec.commentsproject.util.Constant.Atrubutes;
 import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,10 +32,9 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final NewsClient newsClient;
 
-
     @Transactional
     @Override
-    @CachePut(value = "comment", key = "#result.id")
+    @CachePut(value = Atrubutes.COMMENT, key = "#result.id")
     public CommentResponseDto createComment(Long newsId, CommentRequestDto commentRequestDto) {
 
         ResponseEntity<NewsResponseDto> response = newsClient.getNewsById(newsId);
@@ -56,10 +56,9 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(savedComment);
     }
 
-
     @Transactional(readOnly = true)
     @Override
-    @Cacheable(value = "comment")
+    @Cacheable(value = Atrubutes.COMMENT)
     public CommentResponseDto getCommentById(Long id) {
         Comment comment = commentRepository
                 .findById(id)
@@ -70,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    @CachePut(value = "comment", key = "#id")
+    @CachePut(value = Atrubutes.COMMENT, key = "#id")
     public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
@@ -80,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(updatedComment);
     }
 
-    @CacheEvict(value = "comment", key = "#id")
+    @CacheEvict(value = Atrubutes.COMMENT, key = "#id")
     @Override
     @Transactional
     public void deleteComment(Long id) {
@@ -101,7 +100,6 @@ public class CommentServiceImpl implements CommentService {
     public void deleteCommentsByNewsId(Long newsId) {
         commentRepository.deleteByNewsId(newsId);
     }
-
 
     @Transactional(readOnly = true)
     @Override

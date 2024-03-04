@@ -1,5 +1,8 @@
 package by.clevertec.commentsproject.dto.request;
 
+import static by.clevertec.commentsproject.util.Constant.Messages.TEXT_CANNOT_BE_BLANK;
+import static by.clevertec.commentsproject.util.Constant.Messages.TITLE_CANNOT_BE_BLANK;
+
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 import lombok.Getter;
@@ -13,10 +16,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class NewsRequestDto implements Serializable {
 
-    @NotBlank(message = "Title cannot be blank")
+    @NotBlank(message = TITLE_CANNOT_BE_BLANK)
     private String title;
 
-    @NotBlank(message = "Text cannot be blank")
+    @NotBlank(message = TEXT_CANNOT_BE_BLANK)
     private String text;
 
 }

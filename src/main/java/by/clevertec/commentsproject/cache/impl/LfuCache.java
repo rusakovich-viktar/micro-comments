@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-
+@SuppressWarnings("unchecked")
 public class LfuCache<K, V> implements Cache<K, V> {
 
     private final Map<K, V> vals;
@@ -13,7 +13,6 @@ public class LfuCache<K, V> implements Cache<K, V> {
     private final Map<Integer, LinkedHashSet<K>> lists;
     private int min = -1;
     private final int capacity;
-
 
     public LfuCache(int capacity) {
         this.capacity = capacity;
@@ -65,7 +64,6 @@ public class LfuCache<K, V> implements Cache<K, V> {
 
     @Override
     public V remove(Object key) {
-        // Удалить ключ из всех структур данных
         V value = vals.remove(key);
         Integer count = counts.remove(key);
         if (count != null) {

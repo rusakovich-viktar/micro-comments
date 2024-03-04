@@ -1,9 +1,9 @@
 package by.clevertec.commentsproject.controller;
 
-
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
 import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import by.clevertec.commentsproject.service.CommentService;
+import by.clevertec.commentsproject.util.Constant.BaseApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping(BaseApi.COMMENTS)
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-
-    @PostMapping("/news/{newsId}")
+    @PostMapping(BaseApi.NEWS_NEWS_ID)
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long newsId,
                                                             @Valid @RequestBody CommentRequestDto commentRequestDto) {
         return new ResponseEntity<>(
@@ -35,18 +34,18 @@ public class CommentController {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(BaseApi.ID)
     public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Long id) {
         return ResponseEntity.ok(commentService.getCommentById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(BaseApi.ID)
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long id,
                                                             @Valid @RequestBody CommentRequestDto commentRequestDto) {
         return ResponseEntity.ok(commentService.updateComment(id, commentRequestDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(BaseApi.ID)
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
@@ -57,15 +56,13 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getAllComment(pageable));
     }
 
-    /*не использовать напрямую, только как эндпоинт через feign > не проверяет наличие новости, проверка происходит при вызове с микросервиса новостей*/
-    @DeleteMapping("/news/{newsId}")
+    @DeleteMapping(BaseApi.NEWS_NEWS_ID)
     public ResponseEntity<Void> deleteCommentsByNewsId(@PathVariable Long newsId) {
         commentService.deleteCommentsByNewsId(newsId);
         return ResponseEntity.noContent().build();
     }
 
-    /*не использовать напрямую, только как эндпоинт через feign > не проверяет наличие новости, проверка происходит по такому же запросу через сервер новостей*/
-    @GetMapping("/news/{newsId}")
+    @GetMapping(BaseApi.NEWS_NEWS_ID)
     ResponseEntity<Page<CommentResponseDto>> getCommentsByNewsId(@PathVariable Long newsId, Pageable pageable) {
         return ResponseEntity.ok(commentService.getCommentsByNewsId(newsId, pageable));
     }

@@ -43,7 +43,6 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 class CommentServiceImplTest {
 
-
     @Mock
     private CommentRepository commentRepository;
 
@@ -57,7 +56,7 @@ class CommentServiceImplTest {
     private CommentServiceImpl commentService;
 
     private Comment comment;
-    Long newsId = 1L;
+    private final Long newsId = ID_ONE;
 
     @BeforeEach
     void setUp() {
@@ -128,14 +127,12 @@ class CommentServiceImplTest {
                     .build()
                     .buildNewsResponseDto();
 
-
             when(newsClient.getNewsById(newsId)).thenReturn(ResponseEntity.ok(newsResponseDto));
 
             assertThrows(NullPointerException.class, () -> commentService.createComment(newsId, commentRequestDto));
         }
 
     }
-
 
     @Nested
     class GetNewsTests {
@@ -179,7 +176,6 @@ class CommentServiceImplTest {
         }
     }
 
-
     @Nested
     class UpdateCommentTests {
 
@@ -191,7 +187,6 @@ class CommentServiceImplTest {
                     .withText(NEW_TEXT)
                     .build()
                     .buildCommentRequestDto();
-
 
             when(commentRepository.findById(ID_ONE)).thenReturn(Optional.of(comment));
             doAnswer(invocation -> {
@@ -320,13 +315,10 @@ class CommentServiceImplTest {
 
     }
 
-
     @Test
     void deleteCommentsByNewsIdShouldCallRepository() {
-        // given
-        Long newsId = 1L;
 
-        // when
+        // given & when
         commentService.deleteCommentsByNewsId(newsId);
 
         // then

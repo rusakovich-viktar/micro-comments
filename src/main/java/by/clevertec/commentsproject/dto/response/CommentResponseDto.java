@@ -1,6 +1,5 @@
 package by.clevertec.commentsproject.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,5 @@
 package by.clevertec.commentsproject.service;
 
-
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
 import by.clevertec.commentsproject.dto.response.CommentResponseDto;
 import org.springframework.data.domain.Page;
@@ -21,6 +20,5 @@ public interface CommentService {
     void deleteCommentsByNewsId(Long newsId);
 
     Page<CommentResponseDto> getCommentsByNewsId(Long newsId, Pageable pageable);
-
 
 }

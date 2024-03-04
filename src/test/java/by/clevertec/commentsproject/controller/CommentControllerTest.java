@@ -56,7 +56,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(CommentController.class)
 class CommentControllerTest {
 
-
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
@@ -140,7 +139,6 @@ class CommentControllerTest {
                     .andExpect(content().json(objectMapper.writeValueAsString(expected)));
         }
 
-
         @Test
         void createCommentShouldReturnBadRequest_whenInvalidRequest() throws Exception {
 
@@ -151,8 +149,7 @@ class CommentControllerTest {
             mockMvc.perform(post(COMMENTS_NEWS_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidCommentRequestDto)))
-                    .andExpect(status().isMethodNotAllowed());
-
+                    .andExpect(status().isNotFound());
 
         }
 
@@ -186,7 +183,6 @@ class CommentControllerTest {
 
         }
 
-
         @Test
         void updateCommentShouldReturnBadRequest_whenInvalidRequest() throws Exception {
 
@@ -211,7 +207,6 @@ class CommentControllerTest {
         @Test
         void deleteCommentShouldReturnNoContent() throws Exception {
 
-
             // when
             mockMvc.perform(delete(COMMENTS_URL + ID_ONE))
                     .andExpect(status().isNoContent());
@@ -220,7 +215,6 @@ class CommentControllerTest {
             verify(commentService, times(1))
                     .deleteComment(ID_ONE);
         }
-
 
     }
 
@@ -246,7 +240,6 @@ class CommentControllerTest {
             // when
             when(commentService.getAllComment(any(Pageable.class)))
                     .thenReturn(page);
-
 
             // then
             mockMvc.perform(get(COMMENTS)
