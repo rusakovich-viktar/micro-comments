@@ -34,7 +34,7 @@ public class OpenApiConfig {
         contact.url("https://github.com/rusakovich-viktar/news-management-system");
 
         Info info = new Info()
-                .title("Comments system management API")
+                .title("Comments-part API")
                 .version("1.0")
                 .contact(contact);
 
