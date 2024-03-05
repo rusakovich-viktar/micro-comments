@@ -1,25 +1,22 @@
 spring:
-  profiles:
-    default: dev
-
-#    active: prod
-
   application:
     name: micro-comments
-  jpa:
-    properties:
-      hibernate:
-        show-sql: true
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: none
+  cloud:
+    config:
+      fail-fast: true
 
-server:
-  port: 8082
+  profiles:
+    active: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:configserver:http://localhost:8888
 
-micro-comments:
-  openapi:
-    dev-url: http://localhost:8082
-    prod-url: micro-comments:8082
-
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: optional:configserver:http://cloud-config-server:8888
