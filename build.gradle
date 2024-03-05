@@ -41,6 +41,7 @@ dependencies {
     implementation 'by.clevertec:logger-aspect-spring-boot-starter:0.0.1'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:4.1.0'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
