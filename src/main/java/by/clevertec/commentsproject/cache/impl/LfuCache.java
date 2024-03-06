@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+/**
+ * Реализация кэша с алгоритмом вытеснения LFU (Least Frequently Used) - наименее часто используемый элемент.
+ */
 @SuppressWarnings("unchecked")
 public class LfuCache<K, V> implements Cache<K, V> {
 
@@ -22,6 +25,13 @@ public class LfuCache<K, V> implements Cache<K, V> {
         lists.put(1, new LinkedHashSet<>());
     }
 
+    /**
+     * Добавляет элемент в кэш. Если кэш уже полон, удаляет наименее часто используемый элемент.
+     *
+     * @param key   ключ элемента
+     * @param value значение элемента
+     * @return добавленное значение
+     */
     @Override
     public V put(K key, V value) {
         if (capacity <= 0) {
@@ -44,6 +54,12 @@ public class LfuCache<K, V> implements Cache<K, V> {
         return value;
     }
 
+    /**
+     * Получает элемент из кэша по ключу. Увеличивает счетчик использования элемента.
+     *
+     * @param key ключ элемента
+     * @return значение элемента или null, если элемент не найден
+     */
     @Override
     public V get(Object key) {
         if (!vals.containsKey(key)) {
@@ -62,6 +78,12 @@ public class LfuCache<K, V> implements Cache<K, V> {
         return vals.get(key);
     }
 
+    /**
+     * Удаляет элемент из кэша по ключу.
+     *
+     * @param key ключ элемента
+     * @return удаленное значение или null, если элемент не найден
+     */
     @Override
     public V remove(Object key) {
         V value = vals.remove(key);

@@ -1,5 +1,7 @@
 package by.clevertec.commentsproject.service.impl;
 
+import static by.clevertec.commentsproject.util.Constant.Atrubutes.COMMENT;
+
 import by.clevertec.commentsproject.client.NewsClient;
 import by.clevertec.commentsproject.dto.request.CommentRequestDto;
 import by.clevertec.commentsproject.dto.response.CommentResponseDto;
@@ -9,7 +11,6 @@ import by.clevertec.commentsproject.entity.News;
 import by.clevertec.commentsproject.mapper.CommentMapper;
 import by.clevertec.commentsproject.repository.CommentRepository;
 import by.clevertec.commentsproject.service.CommentService;
-import by.clevertec.commentsproject.util.Constant.Atrubutes;
 import by.clevertec.exception.EntityNotFoundExceptionCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -23,18 +24,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Реализация сервиса для управления комментариями.
+ */
 @Service
-@RequiredArgsConstructor
 @EnableCaching
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final NewsClient newsClient;
 
-    @Transactional
+    /**
+     * Создает комментарий к новости.
+     *
+     * @param newsId            идентификатор новости
+     * @param commentRequestDto DTO запроса на создание комментария
+     * @return созданный комментарий
+     */
     @Override
-    @CachePut(value = Atrubutes.COMMENT, key = "#result.id")
+    @Transactional
+    @CachePut(value = COMMENT, key = "#result.id")
     public CommentResponseDto createComment(Long newsId, CommentRequestDto commentRequestDto) {
 
         ResponseEntity<NewsResponseDto> response = newsClient.getNewsById(newsId);
@@ -56,9 +67,15 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(savedComment);
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Получает комментарий по идентификатору.
+     *
+     * @param id идентификатор комментария
+     * @return комментарий
+     */
     @Override
-    @Cacheable(value = Atrubutes.COMMENT)
+    @Cacheable(value = COMMENT)
+    @Transactional(readOnly = true)
     public CommentResponseDto getCommentById(Long id) {
         Comment comment = commentRepository
                 .findById(id)
@@ -67,9 +84,16 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(comment);
     }
 
-    @Transactional
+    /**
+     * Обновляет комментарий.
+     *
+     * @param id                идентификатор комментария
+     * @param commentRequestDto DTO запроса на обновление комментария
+     * @return обновленный комментарий
+     */
     @Override
-    @CachePut(value = Atrubutes.COMMENT, key = "#id")
+    @Transactional
+    @CachePut(value = COMMENT, key = "#id")
     public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
@@ -79,30 +103,53 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(updatedComment);
     }
 
-    @CacheEvict(value = Atrubutes.COMMENT, key = "#id")
+    /**
+     * Удаляет комментарий.
+     *
+     * @param id идентификатор комментария
+     */
     @Override
     @Transactional
+    @CacheEvict(value = COMMENT, key = "#id")
     public void deleteComment(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> EntityNotFoundExceptionCustom.of(Comment.class, id));
         commentRepository.delete(comment);
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Получает все комментарии.
+     *
+     * @param pageable параметры пагинации
+     * @return страница с комментариями
+     */
     @Override
+    @Transactional(readOnly = true)
     public Page<CommentResponseDto> getAllComment(Pageable pageable) {
         return commentRepository.findAll(pageable)
                 .map(commentMapper::toDto);
     }
 
-    @Transactional
+    /**
+     * Удаляет все комментарии к новости.
+     *
+     * @param newsId идентификатор новости
+     */
     @Override
+    @Transactional
     public void deleteCommentsByNewsId(Long newsId) {
         commentRepository.deleteByNewsId(newsId);
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Получает все комментарии к новости.
+     *
+     * @param newsId   идентификатор новости
+     * @param pageable параметры пагинации
+     * @return страница с комментариями к новости
+     */
     @Override
+    @Transactional(readOnly = true)
     public Page<CommentResponseDto> getCommentsByNewsId(Long newsId, Pageable pageable) {
         return commentRepository.findByNewsId(newsId, pageable)
                 .map(commentMapper::toDto);

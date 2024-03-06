@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Класс для передачи данных (ответа) о комментарии.
+ */
 @Getter
 @Setter
 @ToString

@@ -13,13 +13,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Сущность "Новость".
+ */
 @Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "news")
 @NoArgsConstructor
 @EqualsAndHashCode
+@Table(name = "news")
 public class News implements Serializable {
 
     @Id
@@ -29,3 +32,5 @@ public class News implements Serializable {
     private List<Comment> comments;
 
 }
+
+

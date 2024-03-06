@@ -16,11 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+/**
+ * Прокси-класс для управления кэшем комментариев.
+ */
 @Slf4j
 @Aspect
-@RequiredArgsConstructor
 @Component
 @Profile("dev")
+@RequiredArgsConstructor
 public class CommentProxy {
 
     @Value("${cache.algorithm}")
@@ -32,6 +35,13 @@ public class CommentProxy {
     private final AtomicReference<Cache<Long, Object>> userCache = new AtomicReference<>(createCache());
     private final StampedLock lock = new StampedLock();
 
+    /**
+     * Получает комментарии из кэша или из базы данных, если в кэше их нет.
+     *
+     * @param joinPoint точка присоединения
+     * @return объект комментариев
+     * @throws Throwable в случае ошибки
+     */
     @SuppressWarnings("checkstyle:IllegalCatch")
     @Around("@annotation(org.springframework.cache.annotation.Cacheable) "
             + "&& execution(* by.clevertec.commentsproject.service.CommentService.getCommentById(..))")
@@ -68,6 +78,11 @@ public class CommentProxy {
         return result;
     }
 
+    /**
+     * Добавляет новые комментарии в кэш после их создания.
+     *
+     * @param response объект комментариев
+     */
     @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) && "
             + "execution(* by.clevertec.commentsproject.service.CommentService.createComment(..))",
             returning = "response")
@@ -77,6 +92,11 @@ public class CommentProxy {
 
     }
 
+    /**
+     * Удаляет комментарии из кэша после их удаления.
+     *
+     * @param id идентификатор комментариев
+     */
     @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CacheEvict) "
             + "&& execution(* by.clevertec.commentsproject.service.CommentService.deleteComment(Long)) && args(id)",
             argNames = "id")
@@ -86,6 +106,12 @@ public class CommentProxy {
 
     }
 
+    /**
+     * Обновляет комментарии в кэше после их обновления.
+     *
+     * @param id     идентификатор комментариев
+     * @param retVal объект комментариев
+     */
     @AfterReturning(pointcut = "@annotation(org.springframework.cache.annotation.CachePut) &&"
             + " execution(* by.clevertec.commentsproject.service.CommentService.updateComment(Long, ..)) && args(id, ..)",
             argNames = "id,retVal", returning = "retVal")
@@ -95,6 +121,11 @@ public class CommentProxy {
 
     }
 
+    /**
+     * Создает кэш.
+     *
+     * @return объект кэша
+     */
     private Cache<Long, Object> createCache() {
         if (maxCapacity == null) {
             maxCapacity = 50;
@@ -106,3 +137,5 @@ public class CommentProxy {
         }
     }
 }
+
+

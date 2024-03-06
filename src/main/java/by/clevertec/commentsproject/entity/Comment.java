@@ -1,10 +1,11 @@
 package by.clevertec.commentsproject.entity;
 
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,16 +19,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
+/**
+ * Сущность "Комментарий".
+ */
 @Entity
 @Getter
 @Setter
-@Table(name = "comments")
 @NoArgsConstructor
 @FieldNameConstants
+@Table(name = "comments")
 public class Comment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @Column(nullable = false)
     private LocalDateTime time;
@@ -41,10 +45,16 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /**
+     * Новость, к которой относится комментарий.
+     */
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
+    /**
+     * Метод, выполняемый перед сохранением комментария. Устанавливает время создания и обновления, а также имя пользователя.
+     */
     @PrePersist
     public void prePersist() {
         if (this.time == null) {
@@ -57,6 +67,9 @@ public class Comment implements Serializable {
         }
     }
 
+    /**
+     * Метод, выполняемый перед обновлением комментария. Обновляет время обновления.
+     */
     @PreUpdate
     public void preUpdate() {
         this.updateTime = LocalDateTime.now();

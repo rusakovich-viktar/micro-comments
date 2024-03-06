@@ -9,7 +9,6 @@ public class Constant {
     public class BaseApi {
 
         public static final String ID = "/{id}";
-        public static final String HTTP_LOCALHOST_8081 = "http://localhost:8081";
         public static final String NEWS_ID = "/news/{id}";
         public static final String COMMENTS = "/comments";
         public static final String NEWS_NEWS_ID = "/news/{newsId}";
@@ -28,7 +27,6 @@ public class Constant {
     @UtilityClass
     public class Atrubutes {
 
-        public static final String NEWS = "news";
         public static final String COMMENT = "comment";
     }
 
