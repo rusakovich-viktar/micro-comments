@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Конфигурация для OpenAPI.
+ */
 @Configuration
 public class OpenApiConfig {
 
@@ -18,8 +21,13 @@ public class OpenApiConfig {
     @Value("${micro-comments.openapi.prod-url}")
     private String prodUrl;
 
+    /**
+     * Создает и настраивает OpenAPI.
+     *
+     * @return Объект OpenAPI с информацией о серверах и контактах.
+     */
     @Bean
-    public OpenAPI myOpenAPI() {
+    public OpenAPI myOpenApi() {
         Server devServer = new Server();
         devServer.setUrl(devUrl);
         devServer.setDescription("Server URL in Development environment");

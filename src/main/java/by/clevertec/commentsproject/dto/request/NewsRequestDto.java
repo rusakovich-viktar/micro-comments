@@ -10,15 +10,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Data Transfer Object (DTO) для создания или обновления новостей.
+ */
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class NewsRequestDto implements Serializable {
 
+    /**
+     * Заголовок новости.
+     */
     @NotBlank(message = TITLE_CANNOT_BE_BLANK)
     private String title;
-
+    /**
+     * Текст новости.
+     */
     @NotBlank(message = TEXT_CANNOT_BE_BLANK)
     private String text;
 
