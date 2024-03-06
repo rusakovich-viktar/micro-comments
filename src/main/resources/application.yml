@@ -6,7 +6,7 @@ spring:
       fail-fast: true
 
   profiles:
-    active: prod
+    active: dev
 ---
 spring:
   config:
