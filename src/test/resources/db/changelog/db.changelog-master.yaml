@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/ddl/001-changelog-create-table-news.xml
+  - include:
+      file: db/changelog/ddl/002-changelog-create-table-comments.xml
+  - include:
+      file: db/changelog/ddl/003-changelog-modify-table-comments-add-constraint.xml

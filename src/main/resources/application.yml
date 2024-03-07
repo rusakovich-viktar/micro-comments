@@ -1,29 +1,22 @@
 spring:
-  #  profiles:
-  #    active: test
-  datasource:
-    url: jdbc:postgresql://localhost:5432/news_comments
-    username: postgres
-    password: postgres
-  jpa:
-    properties:
-      hibernate:
-        show-sql: true
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: create-drop
-      #        'create', 'create-drop', 'create-only', 'drop', 'update', 'none', 'validate'.
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
-#cache:
-#  algorithm: LRU
-#  capacity: 50
+  application:
+    name: micro-comments
+  cloud:
+    config:
+      fail-fast: true
 
+  profiles:
+    active: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:configserver:http://localhost:8888
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: optional:configserver:http://cloud-config-server:8888

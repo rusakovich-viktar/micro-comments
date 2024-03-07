@@ -1,0 +1,45 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%magenta(%d{HH:mm:ss.SSS}) %highlight([%thread]) %-5level %cyan(%logger{36}) - %blue(%msg%n)
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ALL_LOGS_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/log-file.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] -%kvp- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WARN-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/warn-log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <maxHistory>30</maxHistory>
+            <fileNamePattern>logs/warn-log.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] -%kvp- %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="by.clevertec.commentsproject.service" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="WARN-ROLLING"/>
+        <appender-ref ref="ALL_LOGS_FILE"/>
+    </root>
+
+</configuration>
